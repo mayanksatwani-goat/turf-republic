@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Turf Republic | Pickup football and corporate sports in Bengaluru</title>
+<meta name="description" content="Turf Republic is Bengaluru's sports community: competitive 7-a-side pickup football at Tiger 5 on Wed, Fri and Sun, plus corporate leagues and campus tournaments.">
+<meta property="og:title" content="Turf Republic">
+<meta property="og:description" content="Show up. Play hard. Belong. Pickup football, corporate leagues and campus tournaments in Bengaluru.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0D1912">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%230D1912'/%3E%3Crect x='4' y='4' width='28' height='28' rx='6' fill='none' stroke='%23D7F24A' stroke-width='2.5'/%3E%3Cline x1='4' y1='18' x2='32' y2='18' stroke='%23D7F24A' stroke-width='2.5'/%3E%3Ccircle cx='18' cy='18' r='5.5' fill='none' stroke='%23D7F24A' stroke-width='2.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Familjen+Grotesk:wght@400;500;600&display=swap">
+<style>
+/* Layout: a night game under floodlights. Chalk lines on deep pitch green, one floodlight accent, a scoreboard as the hero. */
+:root{
+  --pitch:#0D1912;
+  --surface:#14241A;
+  --surface-2:#1B2E22;
+  --line:#2B3F31;
+  --chalk:#F1F5EE;
+  --muted:#A7B7AB;
+  --flood:#D7F24A;
+  --on-flood:#0D1912;
+  --cone:#FF8A3D;
+  --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+  --body:'Familjen Grotesk','Helvetica Neue',Arial,sans-serif;
+  color-scheme:dark;
+}
+html{scroll-behavior:smooth}
+body{background:var(--pitch);color:var(--chalk);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+h1,h2,h3{font-family:var(--display);text-transform:uppercase;margin:0;text-wrap:balance;letter-spacing:.01em}
+p{margin:0}
+a{color:var(--chalk)}
+:focus-visible{outline:2px solid var(--flood);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:clamp(16px,4vw,32px)}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:14px;color:var(--muted)}
+
+/* Header */
+.site-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(13,25,18,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.head-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--chalk)}
+.brand b{font-family:var(--display);font-weight:800;font-size:25px;letter-spacing:.06em}
+.site-nav{display:flex;align-items:center;gap:6px 26px;font-weight:500;font-size:16px}
+.site-nav a{text-decoration:none;padding:10px 0;color:var(--chalk)}
+.site-nav a:hover{color:var(--flood)}
+.site-nav .btn{padding:0 20px;min-height:44px;color:var(--on-flood)}
+.site-nav .btn:hover{color:var(--on-flood)}
+.menu-btn{display:none;min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--chalk);font:600 15px var(--body);cursor:pointer}
+@media (max-width:860px){
+  .menu-btn{display:inline-flex;align-items:center}
+  .site-nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;gap:0;padding:8px clamp(16px,4vw,32px) 20px;background:var(--pitch);border-bottom:1px solid var(--line)}
+  .site-nav.open{display:flex}
+  .site-nav a{padding:14px 0;border-bottom:1px solid var(--line)}
+  .site-nav .btn{margin-top:14px;justify-content:center;border-bottom:0}
+}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;background:var(--flood);color:var(--on-flood);font:600 17px var(--body);text-decoration:none;border:0;cursor:pointer;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px);background:#E3F86E}
+.btn.ghost{background:transparent;color:var(--chalk);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--chalk);background:transparent}
+.btn-row{display:flex;flex-wrap:wrap;gap:12px}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.pitch-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.16}
+.hero-grid{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:48px;align-items:center;padding-block:clamp(56px,9vw,112px) clamp(48px,7vw,88px)}
+.hero-copy{display:flex;flex-direction:column;gap:26px;min-width:0}
+.kicker{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;font-size:14px;font-weight:500;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--flood);flex:none}
+.hero h1{font-size:clamp(64px,10vw,140px);line-height:.86;font-weight:900}
+.hero h1 span{color:var(--flood)}
+.lede{font-size:clamp(18px,2vw,21px);color:#CBD6CD;max-width:34ch}
+
+/* Scoreboard */
+.board{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:clamp(22px,3vw,34px);display:flex;flex-direction:column;gap:20px;min-width:0}
+.board-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.status.live{border-color:var(--cone);color:var(--cone)}
+.status.live .dot{background:var(--cone);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.25}}
+.board-day{font-family:var(--display);font-size:clamp(44px,6vw,64px);font-weight:800;line-height:1;text-transform:uppercase}
+.board-meta{color:var(--muted)}
+.clock{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.clock div{background:var(--pitch);border:1px solid var(--line);border-radius:16px;padding:14px 6px 10px;text-align:center}
+.clock b{display:block;font-family:var(--display);font-size:clamp(36px,5vw,52px);font-weight:800;line-height:1;color:var(--flood);font-variant-numeric:tabular-nums}
+.clock small{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.board .btn{align-self:stretch}
+
+/* Stats strip */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:24px 32px;padding-block:36px}
+.stat b{display:block;font-family:var(--display);font-size:56px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:15px;color:var(--muted)}
+
+/* Sections */
+section.block{padding-block:clamp(64px,9vw,112px);border-bottom:1px solid var(--line)}
+.sec-head{display:flex;flex-direction:column;gap:16px;max-width:760px;margin-bottom:44px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--flood)}
+.sec-head h2{font-size:clamp(42px,6vw,80px);line-height:.92;font-weight:800}
+.sec-head p{font-size:19px;color:var(--muted);max-width:56ch}
+.split{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;gap:22px;min-width:0}
+.panel h3{font-size:34px;font-weight:800;line-height:1}
+
+/* Game card */
+.game-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.game-head h3{font-size:52px}
+.days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.days div{background:var(--pitch);border:1px solid var(--line);border-radius:16px;padding:16px 8px;text-align:center}
+.days b{display:block;font-family:var(--display);font-size:34px;font-weight:800;line-height:1.1;text-transform:uppercase}
+.days span{font-size:14px;color:var(--muted)}
+.price{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.price b{font-family:var(--display);font-size:72px;font-weight:900;line-height:1;color:var(--flood)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.steps li{display:grid;grid-template-columns:40px 1fr;gap:16px;padding-block:18px;border-top:1px solid var(--line)}
+.steps li:last-child{border-bottom:1px solid var(--line)}
+.steps i{font-style:normal;font-family:var(--display);font-size:26px;font-weight:800;color:var(--flood)}
+.steps strong{display:block;font-size:18px}
+.steps p{font-size:15px;color:var(--muted)}
+
+/* Forms */
+form{display:flex;flex-direction:column;gap:18px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0;flex:1 1 200px}
+.field>span,.legend{font-size:14px;color:var(--muted);font-weight:500}
+.row{display:flex;flex-wrap:wrap;gap:16px}
+input[type=text],input[type=email],select{height:52px;width:100%;padding:0 14px;background:var(--pitch);border:1px solid var(--line);border-radius:12px;color:var(--chalk);font:16px var(--body)}
+input::placeholder{color:#7F9084}
+input:focus,select:focus{border-color:var(--flood);outline:none}
+fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+legend{padding:0;margin-bottom:10px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg label{position:relative;cursor:pointer}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg span{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);font-weight:500;font-size:15px;transition:background .15s,color .15s,border-color .15s}
+.seg label:hover span{border-color:var(--chalk)}
+.seg input:checked+span{background:var(--flood);border-color:var(--flood);color:var(--on-flood)}
+.seg input:focus-visible+span{outline:2px solid var(--flood);outline-offset:3px}
+.cards-choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.cards-choice label{position:relative;cursor:pointer;display:block}
+.cards-choice input{position:absolute;opacity:0;width:1px;height:1px}
+.cards-choice .c{display:flex;flex-direction:column;gap:4px;height:100%;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--pitch);transition:border-color .15s}
+.cards-choice .c strong{font-family:var(--display);font-size:24px;text-transform:uppercase;line-height:1.05}
+.cards-choice .c small{font-size:14px;color:var(--muted);line-height:1.4}
+.cards-choice input:checked+.c{border-color:var(--flood);box-shadow:inset 0 0 0 1px var(--flood)}
+.cards-choice input:focus-visible+.c{outline:2px solid var(--flood);outline-offset:3px}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-top:16px;border-top:1px solid var(--line)}
+.total b{font-family:var(--display);font-size:40px;font-weight:800;color:var(--flood);font-variant-numeric:tabular-nums}
+.err{color:var(--cone);font-size:14px;min-height:1px}
+.done{display:flex;flex-direction:column;gap:14px;padding:20px;border:1px solid var(--flood);border-radius:18px;background:var(--pitch)}
+.done strong{font-size:18px}
+.done pre{margin:0;white-space:pre-wrap;word-break:break-word;font:15px/1.5 var(--body);color:#CBD6CD;padding:14px;border-radius:12px;background:var(--surface-2)}
+.phone{user-select:all;font-weight:600;color:var(--chalk)}
+
+/* Leaderboard */
+.lb{display:flex;flex-direction:column;gap:18px}
+.lb-tools{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabs button{min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--chalk);font:500 15px var(--body);cursor:pointer}
+.tabs button:hover{border-color:var(--chalk)}
+.tabs button[aria-selected=true]{background:var(--flood);border-color:var(--flood);color:var(--on-flood)}
+.lb-search{flex:0 1 260px;min-width:0}
+.lb-table{background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.lb-row{display:grid;grid-template-columns:48px minmax(0,1.3fr) minmax(0,1fr) 64px;gap:14px;align-items:center;padding:14px 22px;border-top:1px solid var(--line)}
+.lb-row:first-child{border-top:0}
+.lb-row.head{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-block:12px}
+.lb-rank{font-family:var(--display);font-size:26px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums}
+.lb-row.top .lb-rank{color:var(--flood)}
+.lb-name{font-weight:600;font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-name small{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+.bar{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:999px;background:var(--flood);transition:width .4s ease}
+.lb-row:not(.top) .bar i{background:#7E9A5C}
+.lb-val{text-align:right;font-family:var(--display);font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
+.lb-empty{padding:28px 22px;color:var(--muted)}
+.lb-foot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center}
+.src{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.src .dot.off{background:var(--muted)}
+@media (max-width:560px){.lb-row{grid-template-columns:36px minmax(0,1fr) 52px;padding-inline:16px}.lb-row .bar,.lb-row .h-bar{display:none}}
+
+/* Corporate */
+.formats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:18px;margin-bottom:28px}
+.format{padding:28px;border:1px solid var(--line);border-radius:22px;display:flex;flex-direction:column;gap:12px}
+.format h3{font-size:30px;line-height:1;font-weight:800}
+.format p{font-size:16px;color:var(--muted)}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{display:flex;gap:12px;align-items:center;padding-block:13px;border-top:1px solid var(--line)}
+.checks li:last-child{border-bottom:1px solid var(--line)}
+
+/* Campus + grounds */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:18px}
+.tile{padding:28px;border:1px solid var(--line);border-radius:22px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.tile h3{font-size:34px;line-height:1;font-weight:800}
+.tile p{color:var(--muted);font-size:16px}
+.tile.live{border-color:var(--flood);background:var(--surface)}
+.tile.dash{border-style:dashed}
+.chip{align-self:flex-start;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);color:var(--muted)}
+.chip.on{background:var(--flood);border-color:var(--flood);color:var(--on-flood)}
+.chip.soon{border-color:var(--cone);color:var(--cone)}
+
+.nav-social{display:inline-flex;align-items:center;gap:8px}
+
+/* Follow */
+.social{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px}
+.social a{display:flex;flex-direction:column;gap:14px;padding:clamp(24px,3vw,34px);border:1px solid var(--line);border-radius:24px;background:var(--surface);text-decoration:none;color:var(--chalk);transition:border-color .15s,transform .15s}
+.social a:hover{border-color:var(--flood);transform:translateY(-2px)}
+.social a.primary{border-color:var(--flood)}
+.social .s-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.social svg{color:var(--flood)}
+.social h3{font-size:clamp(32px,4vw,44px);line-height:1;font-weight:800;overflow-wrap:anywhere}
+.social p{color:var(--muted);font-size:16px}
+.social .go{font-weight:600;color:var(--flood)}
+
+/* CTA + footer */
+.cta{background:var(--flood);color:var(--on-flood)}
+.cta-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:28px;padding-block:clamp(56px,8vw,96px)}
+.cta h2{font-size:clamp(48px,7vw,100px);line-height:.88;font-weight:900}
+.cta p{font-size:19px;margin-top:10px}
+.cta .btn{background:var(--on-flood);color:var(--chalk);min-height:58px;padding:0 32px}
+.cta .btn:hover{background:#1C3022}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:24px;padding-block:44px}
+footer nav{display:flex;flex-wrap:wrap;gap:4px 26px}
+footer nav a{padding:10px 0;text-decoration:none}
+footer nav a:hover{color:var(--flood)}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+</style>
+
+<style>body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap head-row">
+    <a class="brand" href="#top" aria-label="Turf Republic home">
+      <svg width="34" height="34" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="2" y="2" width="32" height="32" rx="8" stroke="#D7F24A" stroke-width="2.5"/><line x1="2" y1="18" x2="34" y2="18" stroke="#D7F24A" stroke-width="2.5"/><circle cx="18" cy="18" r="6" stroke="#D7F24A" stroke-width="2.5"/></svg>
+      <b>TURF REPUBLIC</b>
+    </a>
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <a href="#play">Play</a>
+      <a href="#leaderboard">Leaderboard</a>
+      <a href="#corporate">Corporate</a>
+      <a href="#campus">Campus</a>
+      <a href="#grounds">Grounds</a>
+      <a class="nav-social" href="https://www.instagram.com/_kora.fc_/" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>Instagram</a>
+      <a class="btn" href="#book">Book a game</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="pitch-lines" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" fill="none" stroke="#F1F5EE" stroke-width="2" aria-hidden="true">
+      <rect x="40" y="40" width="1120" height="620"/>
+      <line x1="600" y1="40" x2="600" y2="660"/>
+      <circle cx="600" cy="350" r="92"/>
+      <circle cx="600" cy="350" r="4" fill="#F1F5EE"/>
+      <rect x="40" y="200" width="150" height="300"/>
+      <rect x="1010" y="200" width="150" height="300"/>
+      <path d="M190 290 a70 70 0 0 1 0 120"/>
+      <path d="M1010 290 a70 70 0 0 0 0 120"/>
+    </svg>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="kicker"><span class="dot"></span>Bengaluru's sports community</span>
+        <h1>Show up.<br>Play hard.<br><span>Belong.</span></h1>
+        <p class="lede">Competitive pickup football three nights a week, plus corporate leagues and campus tournaments across the city.</p>
+        <div class="btn-row">
+          <a class="btn" href="#book">Book your spot</a>
+          <a class="btn ghost" href="https://chat.whatsapp.com/BhywQS9eBqj3hebIrcU0yV" target="_blank" rel="noopener">Join the WhatsApp group</a>
+        </div>
+      </div>
+
+      <div class="board" role="group" aria-labelledby="nk-label">
+        <div class="board-top">
+          <span class="tag" id="nk-label">Next kick-off</span>
+          <span class="status" id="nk-status" aria-live="polite"><span class="dot"></span><span id="nk-status-text">Booking open</span></span>
+        </div>
+        <div class="board-day" id="nk-day">Wed · Fri · Sun</div>
+        <div class="board-meta">Tiger 5 · 9–10 PM · 7-a-side · ₹280</div>
+        <div class="clock" role="timer" aria-label="Time until next kick-off">
+          <div><b id="cd-d">--</b><small>Days</small></div>
+          <div><b id="cd-h">--</b><small>Hrs</small></div>
+          <div><b id="cd-m">--</b><small>Mins</small></div>
+          <div><b id="cd-s">--</b><small>Secs</small></div>
+        </div>
+        <a class="btn" href="#book" id="nk-book">Book this game</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap stats" aria-label="Community in numbers">
+    <div class="stat"><b>300+</b><span>Community members</span></div>
+    <div class="stat"><b>3</b><span>Games every week</span></div>
+    <div class="stat"><b id="st-players">41</b><span>Players on the leaderboard</span></div>
+    <div class="stat"><b id="st-goals">375</b><span>Goals logged</span></div>
+  </div>
+
+  <section class="block" id="play">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Play</span>
+        <h2>Pickup games</h2>
+        <p>Competitive 7-a-side for players who take the game seriously. Three nights a week, a full list every time.</p>
+      </div>
+      <div class="split">
+        <div class="panel">
+          <div class="game-head">
+            <div><span class="small">Football · 7-a-side</span><h3>Tiger 5</h3></div>
+            <span class="chip on">Live now</span>
+          </div>
+          <div class="days">
+            <div><b>Wed</b><span>9–10 PM</span></div>
+            <div><b>Fri</b><span>9–10 PM</span></div>
+            <div><b>Sun</b><span>9–10 PM</span></div>
+          </div>
+          <div class="price"><b>₹280</b><span class="muted">per player, per game</span></div>
+          <ol class="steps">
+            <li><i>1</i><div><strong>Pick your game</strong><p>Choose a night and your position below.</p></div></li>
+            <li><i>2</i><div><strong>Send it on WhatsApp</strong><p>Your booking message is written for you.</p></div></li>
+            <li><i>3</i><div><strong>Pay to confirm</strong><p>Lists fill fast. Your spot is held once you've paid.</p></div></li>
+            <li><i>4</i><div><strong>Play and climb the table</strong><p>Log your goals, assists, saves and tackles after the game.</p></div></li>
+          </ol>
+        </div>
+
+        <div class="panel" id="book">
+          <h3>Book your spot</h3>
+          <form id="book-form" novalidate>
+            <label class="field"><span>Your name</span><input id="b-name" type="text" autocomplete="name" placeholder="e.g. Arjun" required></label>
+            <label class="field"><span>Game</span><select id="b-game" required><option>Next Wednesday · 9–10 PM</option></select></label>
+            <fieldset>
+              <legend class="legend">Position</legend>
+              <div class="seg" id="b-pos">
+                <label><input type="radio" name="pos" value="Any" checked><span>Any</span></label>
+                <label><input type="radio" name="pos" value="Goalkeeper"><span>Goalkeeper</span></label>
+                <label><input type="radio" name="pos" value="Defence"><span>Defence</span></label>
+                <label><input type="radio" name="pos" value="Midfield"><span>Midfield</span></label>
+                <label><input type="radio" name="pos" value="Attack"><span>Attack</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend class="legend">Spots</legend>
+              <div class="seg" id="b-count">
+                <label><input type="radio" name="count" value="1" checked><span>Just me</span></label>
+                <label><input type="radio" name="count" value="2"><span>Me + 1</span></label>
+                <label><input type="radio" name="count" value="3"><span>Me + 2</span></label>
+              </div>
+            </fieldset>
+            <div class="total"><span class="muted" id="b-total-label">1 spot × ₹280</span><b id="b-total">₹280</b></div>
+            <p class="err" id="b-err" role="alert"></p>
+            <button class="btn" type="submit">Book on WhatsApp</button>
+          </form>
+          <div class="done" id="b-done" hidden>
+            <strong>Your booking message is ready</strong>
+            <pre id="b-msg"></pre>
+            <div class="btn-row">
+              <a class="btn" id="b-wa" href="https://wa.me/916354246186" target="_blank" rel="noopener">Send on WhatsApp</a>
+              <button class="btn ghost" type="button" data-copy="b-msg">Copy message</button>
+            </div>
+            <p class="small">Or message <span class="phone">+91 63542 46186</span> directly. Your spot is confirmed once you've paid.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="leaderboard">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Live leaderboard</span>
+        <h2>Every goal counts</h2>
+        <p>Every match is logged: goals, assists, saves, tackles and Man of the Match. Climb the table and settle the arguments.</p>
+      </div>
+      <div class="lb">
+        <div class="lb-tools">
+          <div class="tabs" role="tablist" aria-label="Leaderboard category" id="lb-tabs"></div>
+          <label class="lb-search"><span class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Find a player</span><input type="text" id="lb-q" placeholder="Find a player" autocomplete="off"></label>
+        </div>
+        <div class="lb-table" id="lb-table" role="tabpanel" aria-live="polite"></div>
+        <div class="lb-foot">
+          <span class="src" id="lb-src"><span class="dot off"></span><span id="lb-src-text">Loading stats…</span></span>
+          <div class="btn-row">
+            <button class="btn ghost" type="button" id="lb-more">Show all players</button>
+            <a class="btn ghost" href="https://mayanksatwani-goat.github.io/kfc-leaderboard/" target="_blank" rel="noopener">Submit your match stats</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="corporate">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Corporate</span>
+        <h2>Corporate leagues and team days</h2>
+        <p>Get your team out of the office and onto the ground. We run the whole event, from booking the venue to the final whistle.</p>
+      </div>
+      <div class="formats">
+        <div class="format"><h3>Inter-company leagues</h3><p>A 6 to 8 week evening league against other companies, with live standings and a final.</p></div>
+        <div class="format"><h3>Tournaments</h3><p>A one-day knockout for departments, offices or partner companies, with trophies and awards.</p></div>
+        <div class="format"><h3>Team sports days</h3><p>A mixed-sport day for the whole team, built for casual players and regulars alike.</p></div>
+      </div>
+      <div class="split">
+        <div class="panel">
+          <h3>We handle</h3>
+          <ul class="checks">
+            <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D7F24A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>Venue booking across Tiger 5 grounds</li>
+            <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D7F24A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>Teams and fixtures</li>
+            <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D7F24A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>Referees and match hosts</li>
+            <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D7F24A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>Live stats and a leaderboard</li>
+            <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D7F24A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>Photos and video</li>
+            <li><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D7F24A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg>Trophies and awards</li>
+          </ul>
+          <p class="small">Football, padel, pickleball, box cricket, badminton and more.</p>
+        </div>
+
+        <div class="panel">
+          <h3>Plan your event</h3>
+          <form id="corp-form" novalidate>
+            <fieldset>
+              <legend class="legend">Format</legend>
+              <div class="cards-choice">
+                <label><input type="radio" name="fmt" value="Inter-company league" checked><span class="c"><strong>League</strong><small>6–8 weeks</small></span></label>
+                <label><input type="radio" name="fmt" value="One-day tournament"><span class="c"><strong>Tournament</strong><small>One day</small></span></label>
+                <label><input type="radio" name="fmt" value="Team sports day"><span class="c"><strong>Sports day</strong><small>Mixed sports</small></span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend class="legend">Sports (pick any)</legend>
+              <div class="seg">
+                <label><input type="checkbox" name="sport" value="Football" checked><span>Football</span></label>
+                <label><input type="checkbox" name="sport" value="Padel"><span>Padel</span></label>
+                <label><input type="checkbox" name="sport" value="Pickleball"><span>Pickleball</span></label>
+                <label><input type="checkbox" name="sport" value="Box cricket"><span>Box cricket</span></label>
+                <label><input type="checkbox" name="sport" value="Badminton"><span>Badminton</span></label>
+              </div>
+            </fieldset>
+            <div class="row">
+              <label class="field"><span>Your name</span><input id="c-name" type="text" autocomplete="name" required></label>
+              <label class="field"><span>Company</span><input id="c-company" type="text" autocomplete="organization" required></label>
+            </div>
+            <div class="row">
+              <label class="field"><span>Work email</span><input id="c-email" type="email" autocomplete="email" required></label>
+              <label class="field"><span>Team size</span><select id="c-size"><option>10 to 25</option><option>25 to 50</option><option>50 to 100</option><option>100+</option></select></label>
+            </div>
+            <label class="field"><span>When</span><select id="c-when"><option>Flexible</option></select></label>
+            <p class="err" id="c-err" role="alert"></p>
+            <button class="btn" type="submit">Send enquiry on WhatsApp</button>
+          </form>
+          <div class="done" id="c-done" hidden>
+            <strong>Your enquiry is ready to send</strong>
+            <pre id="c-msg"></pre>
+            <div class="btn-row">
+              <a class="btn" id="c-wa" href="https://wa.me/916354246186" target="_blank" rel="noopener">Send on WhatsApp</a>
+              <button class="btn ghost" type="button" data-copy="c-msg">Copy message</button>
+            </div>
+            <p class="small">Or message <span class="phone">+91 63542 46186</span> directly.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="campus">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Campus</span>
+        <h2>Bring it to your campus</h2>
+        <p>Student squads, inter-campus tournaments and afternoon games priced for students.</p>
+      </div>
+      <div class="split">
+        <div class="tiles">
+          <div class="tile"><h3>Campus captains</h3><p>Run the game at your campus, fill the list and play for free.</p></div>
+          <div class="tile"><h3>Inter-campus cup</h3><p>One tournament, every campus, one table to top.</p></div>
+          <div class="tile"><span class="chip soon">Coming soon</span><h3>Student slots</h3><p>Afternoon games at student prices.</p></div>
+        </div>
+        <div class="panel">
+          <h3>Become a campus captain</h3>
+          <form id="camp-form" novalidate>
+            <label class="field"><span>Your name</span><input id="k-name" type="text" autocomplete="name" required></label>
+            <label class="field"><span>Campus</span>
+              <select id="k-campus">
+                <option>CHRIST Central Campus</option>
+                <option>CHRIST Bannerghatta Road Campus</option>
+                <option>CHRIST Kengeri Campus</option>
+                <option>CHRIST Yeshwanthpur Campus</option>
+                <option>Another college</option>
+              </select>
+            </label>
+            <label class="field"><span>Course and year</span><input id="k-course" type="text" placeholder="e.g. BBA, 2nd year"></label>
+            <p class="err" id="k-err" role="alert"></p>
+            <button class="btn" type="submit">Apply on WhatsApp</button>
+          </form>
+          <div class="done" id="k-done" hidden>
+            <strong>Your application is ready to send</strong>
+            <pre id="k-msg"></pre>
+            <div class="btn-row">
+              <a class="btn" id="k-wa" href="https://wa.me/916354246186" target="_blank" rel="noopener">Send on WhatsApp</a>
+              <button class="btn ghost" type="button" data-copy="k-msg">Copy message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="grounds">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Grounds</span>
+        <h2>Across Bengaluru</h2>
+        <p>We're adding new grounds and new nights. Tell us where you play.</p>
+      </div>
+      <div class="tiles">
+        <div class="tile live"><span class="chip on">Live</span><h3>Tiger 5</h3><p>Football 7s · Wed, Fri, Sun · 9–10 PM</p></div>
+        <div class="tile"><span class="chip soon">Coming soon</span><h3>Next ground</h3><p>New area announced soon.</p></div>
+        <div class="tile dash"><h3>Your area?</h3><p>Tell us where you play and we'll bring a game there.</p><a href="https://wa.me/916354246186?text=Hi%20Turf%20Republic!%20You%20should%20start%20games%20in%3A%20" target="_blank" rel="noopener" style="font-weight:600;padding-block:10px">Suggest an area</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="follow">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Follow the community</span>
+        <h2>Never miss a game</h2>
+        <p>Instagram is where everything happens first: game lists, results, highlights and announcements.</p>
+      </div>
+      <div class="social">
+        <a class="primary" href="https://www.instagram.com/_kora.fc_/" target="_blank" rel="noopener">
+          <span class="s-top">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+            <span class="chip on">Main channel</span>
+          </span>
+          <h3>@_kora.fc_</h3>
+          <p>Game lists, match highlights, results and announcements. DM us to start playing.</p>
+          <span class="go">Follow on Instagram</span>
+        </a>
+        <a href="https://youtube.com/@korafootballclub" target="_blank" rel="noopener">
+          <span class="s-top">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9.5v5l4.5-2.5z" fill="currentColor"/></svg>
+          </span>
+          <h3>@korafootballclub</h3>
+          <p>Match videos from our games at Tiger 5.</p>
+          <span class="go">Watch on YouTube</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section class="cta">
+  <div class="wrap cta-row">
+    <div>
+      <h2>Your game is waiting</h2>
+      <p>Join 300+ players across Bengaluru. The next list drops on WhatsApp.</p>
+    </div>
+    <a class="btn" href="https://chat.whatsapp.com/BhywQS9eBqj3hebIrcU0yV" target="_blank" rel="noopener">Join the community</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <b style="font-family:var(--display);font-size:26px;letter-spacing:.06em">TURF REPUBLIC</b>
+      <span class="small">Home of Kora FC · Bengaluru</span>
+      <span class="small">WhatsApp <span class="phone">+91 63542 46186</span></span>
+    </div>
+    <nav aria-label="Footer">
+      <a href="https://www.instagram.com/_kora.fc_/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://youtube.com/@korafootballclub" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://chat.whatsapp.com/BhywQS9eBqj3hebIrcU0yV" target="_blank" rel="noopener">WhatsApp group</a>
+      <a href="https://mayanksatwani-goat.github.io/kfc-leaderboard/" target="_blank" rel="noopener">Leaderboard</a>
+    </nav>
+    <span class="small" style="width:100%">© <span id="yr">2026</span> Turf Republic</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var WA = '916354246186';
+  var PRICE = 280;
+  var IST = 330 * 60000;
+  var GAME_DAYS = [0, 3, 5]; // Sun, Wed, Fri
+  var KICKOFF = 21;
+  var SB_URL = 'https://ppfnwfpmpikslabtxgea.supabase.co';
+  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBwZm53ZnBtcGlrc2xhYnR4Z2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NzI4MDQsImV4cCI6MjA5NzI0ODgwNH0.XgLg61qA3I2vhrTEu8cOrAaFIA2FT_ENYjwmitxqClc';
+
+  function $(id){ return document.getElementById(id); }
+  function waLink(text){ return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(text); }
+  var fmtDay = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'short', day: 'numeric', month: 'short' });
+  var fmtLong = new Intl.DateTimeFormat('en-IN', { timeZone: 'Asia/Kolkata', weekday: 'long', day: 'numeric', month: 'long' });
+
+  /* Mobile menu */
+  var menuBtn = $('menu-btn'), nav = $('site-nav');
+  menuBtn.addEventListener('click', function(){
+    var open = nav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') { nav.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); }
+  });
+
+  /* Upcoming games (all times in IST) */
+  function upcoming(n){
+    var now = Date.now(), ist = new Date(now + IST), out = [];
+    var y = ist.getUTCFullYear(), m = ist.getUTCMonth(), d = ist.getUTCDate();
+    for (var i = 0; i < 21 && out.length < n; i++) {
+      var day = new Date(Date.UTC(y, m, d + i));
+      if (GAME_DAYS.indexOf(day.getUTCDay()) === -1) continue;
+      var start = Date.UTC(y, m, d + i, KICKOFF, 0) - IST;
+      if (now < start + 3600000) out.push({ start: start, end: start + 3600000 });
+    }
+    return out;
+  }
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+  function fillGames(){
+    var sel = $('b-game'), keep = sel.value, games = upcoming(6);
+    sel.textContent = '';
+    games.forEach(function(g){
+      var o = document.createElement('option');
+      o.value = fmtLong.format(g.start);
+      o.textContent = fmtDay.format(g.start) + ' · 9–10 PM' + (Date.now() >= g.start ? ' (on now)' : '');
+      sel.appendChild(o);
+    });
+    if (keep && Array.prototype.some.call(sel.options, function(o){ return o.value === keep; })) sel.value = keep;
+  }
+
+  var lastStatus = '';
+  function tick(){
+    var g = upcoming(1)[0]; if (!g) return;
+    var now = Date.now(), status = $('nk-status'), text;
+    $('nk-day').textContent = fmtDay.format(g.start);
+    if (now >= g.start) {
+      text = 'Game on now';
+      status.classList.add('live');
+      ['cd-d','cd-h','cd-m','cd-s'].forEach(function(id){ $(id).textContent = '00'; });
+      $('nk-book').textContent = 'Book the next one';
+    } else {
+      status.classList.remove('live');
+      var diff = Math.floor((g.start - now) / 1000);
+      $('cd-d').textContent = pad(Math.floor(diff / 86400));
+      $('cd-h').textContent = pad(Math.floor(diff % 86400 / 3600));
+      $('cd-m').textContent = pad(Math.floor(diff % 3600 / 60));
+      $('cd-s').textContent = pad(diff % 60);
+      text = diff < 7200 ? 'Kick-off soon' : 'Booking open';
+      $('nk-book').textContent = 'Book this game';
+    }
+    if (text !== lastStatus) { $('nk-status-text').textContent = text; lastStatus = text; fillGames(); }
+  }
+  $('nk-book').addEventListener('click', function(){
+    var first = $('b-game').options[0]; if (first) $('b-game').value = first.value;
+  });
+  fillGames(); tick(); setInterval(tick, 1000);
+
+  /* Shared: show the ready-to-send WhatsApp message */
+  function showReady(prefix, text){
+    $(prefix + '-msg').textContent = text;
+    $(prefix + '-wa').href = waLink(text);
+    var box = $(prefix + '-done');
+    box.hidden = false;
+    box.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+    $(prefix + '-wa').focus({ preventScroll: true });
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-copy]'); if (!b) return;
+    var el = $(b.getAttribute('data-copy')), label = b.textContent;
+    function done(msg){ b.textContent = msg; setTimeout(function(){ b.textContent = label; }, 1800); }
+    try {
+      navigator.clipboard.writeText(el.textContent).then(function(){ done('Copied'); }, function(){ selectText(el); done('Selected, press copy'); });
+    } catch (err) { selectText(el); done('Selected, press copy'); }
+  });
+  function selectText(el){ var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+  function val(id){ return $(id).value.trim(); }
+  function checked(name){ var el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
+
+  /* Booking */
+  function updateTotal(){
+    var n = parseInt(checked('count'), 10) || 1;
+    $('b-total').textContent = '₹' + (n * PRICE).toLocaleString('en-IN');
+    $('b-total-label').textContent = n + (n === 1 ? ' spot' : ' spots') + ' × ₹' + PRICE;
+  }
+  $('b-count').addEventListener('change', updateTotal); updateTotal();
+  $('book-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = val('b-name');
+    if (!name) { $('b-err').textContent = 'Add your name so we can put you on the list.'; $('b-name').focus(); return; }
+    $('b-err').textContent = '';
+    var n = parseInt(checked('count'), 10) || 1;
+    var text = 'Hi Turf Republic! I\'d like to book for ' + $('b-game').value + ', 9–10 PM at Tiger 5.\n\n' +
+      'Name: ' + name + '\n' +
+      'Position: ' + checked('pos') + '\n' +
+      'Spots: ' + n + (n > 1 ? ' (me + ' + (n - 1) + ')' : '') + '\n' +
+      'Total: ₹' + (n * PRICE) + '\n\nSend me the payment details to confirm.';
+    showReady('b', text);
+  });
+
+  /* Corporate */
+  (function(){
+    var sel = $('c-when'), ist = new Date(Date.now() + IST);
+    var f = new Intl.DateTimeFormat('en-IN', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    for (var i = 0; i < 6; i++) {
+      var o = document.createElement('option');
+      o.textContent = f.format(new Date(Date.UTC(ist.getUTCFullYear(), ist.getUTCMonth() + i, 1)));
+      sel.appendChild(o);
+    }
+  })();
+  $('corp-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = val('c-name'), company = val('c-company'), email = val('c-email');
+    var sports = Array.prototype.map.call(document.querySelectorAll('input[name="sport"]:checked'), function(i){ return i.value; });
+    var problem = !name ? ['c-name', 'Add your name.'] : !company ? ['c-company', 'Add your company name.'] :
+      (!email || !$('c-email').checkValidity()) ? ['c-email', 'Add a valid work email so we can send a proposal.'] :
+      !sports.length ? [null, 'Pick at least one sport.'] : null;
+    if (problem) { $('c-err').textContent = problem[1]; if (problem[0]) $(problem[0]).focus(); return; }
+    $('c-err').textContent = '';
+    var text = 'Hi Turf Republic! I\'d like to plan a corporate event.\n\n' +
+      'Name: ' + name + '\nCompany: ' + company + '\nEmail: ' + email + '\n' +
+      'Format: ' + checked('fmt') + '\nSports: ' + sports.join(', ') + '\n' +
+      'Team size: ' + $('c-size').value + '\nWhen: ' + $('c-when').value;
+    showReady('c', text);
+  });
+
+  /* Campus */
+  $('camp-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = val('k-name');
+    if (!name) { $('k-err').textContent = 'Add your name.'; $('k-name').focus(); return; }
+    $('k-err').textContent = '';
+    var course = val('k-course');
+    var text = 'Hi Turf Republic! I\'d like to be a campus captain.\n\n' +
+      'Name: ' + name + '\nCampus: ' + $('k-campus').value + (course ? '\nCourse: ' + course : '');
+    showReady('k', text);
+  });
+
+  /* Leaderboard */
+  // Snapshot of the live table (12 Oct 2026), used if live stats can't load.
+  var SNAP = [
+    ['Nigel',71,79,121,1,19,1],['Mayank',4,62,116,87,503,4],['Irfan',85,40,109,0,0,1],['Sukrit',6,38,85,0,0,0],
+    ['Harsh',81,20,54,17,571,2],['Gana',84,19,33,2,0,1],['Richik',93,15,27,10,11,2],['Akshay',79,15,25,0,2,2],
+    ['Vishaal',74,8,19,7,33,1],['Abhyuday',83,6,15,0,1,0],['Aryan (Bhattu)',90,5,14,2,11,1],['Gaurav',92,9,13,2,2,1],
+    ['Aryan Singh',73,6,12,101,68,1],['Manav',82,8,11,0,0,1],['Shawn',91,3,9,2,24,0],['Shafiq',99,7,7,12,1,0],
+    ['Sharadrith',104,7,7,0,0,0],['Harsh Raghav',88,6,7,0,3,1],['Rishav',97,5,6,2,4,0],['Pratyush',80,3,6,2,5,0],
+    ['Bhavesh Jain',72,1,6,2,17,0],['Kishlay',107,3,5,1,0,0],['max',96,3,5,0,2,0],['Kaushik',86,2,4,0,0,0],
+    ['Karan Thakur',106,1,4,0,6,0],['Sooraj',103,2,3,0,0,0],['Pratham',89,0,3,0,2,0],['FAIZ',95,1,2,2,9,0],
+    ['Jayesh',87,0,2,0,0,0],['Jay',75,1,1,0,0,0],['Akshat',102,0,1,2,0,0],['Samyak',76,0,1,185,1,2],
+    ['Amit',78,0,0,0,0,0],['Eshika',5,0,0,0,0,0],['Ayusg',77,0,0,0,0,0],['Eliezer David Rebello',101,0,0,0,0,0],
+    ['Rabeeh',94,0,0,0,0,0],['Rishab',50,0,0,0,0,0],['Mateen',100,0,0,0,0,0],['Kashyap',98,0,0,0,0,0],
+    ['Manvendra Choudhary',105,0,0,2,1,0]
+  ].map(function(r){ return { name: r[0], num: r[1], mp: null, g: r[2], a: r[3] - r[2], ga: r[3], sv: r[4], tk: r[5], motm: r[6] }; });
+
+  var CATS = [
+    { k: 'ga', label: 'Overall', col: 'G+A' }, { k: 'g', label: 'Goals', col: 'Goals' }, { k: 'a', label: 'Assists', col: 'Assists' },
+    { k: 'sv', label: 'Saves', col: 'Saves' }, { k: 'tk', label: 'Tackles', col: 'Tackles' }, { k: 'motm', label: 'MOTM', col: 'MOTM' }
+  ];
+  var state = { data: SNAP, cat: 'ga', q: '', all: false };
+
+  var tabs = $('lb-tabs');
+  CATS.forEach(function(c){
+    var b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('role', 'tab'); b.textContent = c.label; b.dataset.k = c.k;
+    b.setAttribute('aria-selected', c.k === state.cat ? 'true' : 'false');
+    b.addEventListener('click', function(){
+      state.cat = c.k;
+      Array.prototype.forEach.call(tabs.children, function(t){ t.setAttribute('aria-selected', t.dataset.k === c.k ? 'true' : 'false'); });
+      render();
+    });
+    tabs.appendChild(b);
+  });
+  $('lb-q').addEventListener('input', function(e){ state.q = e.target.value.trim().toLowerCase(); render(); });
+  $('lb-more').addEventListener('click', function(){ state.all = !state.all; render(); });
+
+  function el(tag, cls, text){ var x = document.createElement(tag); if (cls) x.className = cls; if (text != null) x.textContent = text; return x; }
+
+  function render(){
+    var cat = CATS.filter(function(c){ return c.k === state.cat; })[0];
+    var ranked = state.data.filter(function(p){ return p[cat.k] > 0; })
+      .sort(function(a, b){ return b[cat.k] - a[cat.k] || b.g - a.g || a.name.localeCompare(b.name); })
+      .map(function(p, i){ return { p: p, rank: i + 1 }; });
+    var max = ranked.length ? ranked[0].p[cat.k] : 1;
+    var rows = state.q ? ranked.filter(function(r){ return r.p.name.toLowerCase().indexOf(state.q) !== -1; }) : ranked;
+    var shown = state.all || state.q ? rows : rows.slice(0, 10);
+
+    var table = $('lb-table'); table.textContent = '';
+    var head = el('div', 'lb-row head');
+    head.appendChild(el('span', null, '#')); head.appendChild(el('span', null, 'Player'));
+    head.appendChild(el('span', 'h-bar', '')); var hv = el('span', null, cat.col); hv.style.textAlign = 'right'; head.appendChild(hv);
+    table.appendChild(head);
+
+    if (!shown.length) {
+      table.appendChild(el('div', 'lb-empty', state.q ? 'No player matches "' + state.q + '" in this category.' : 'No stats in this category yet.'));
+    }
+    shown.forEach(function(r){
+      var row = el('div', 'lb-row' + (r.rank <= 3 ? ' top' : ''));
+      row.appendChild(el('span', 'lb-rank', String(r.rank)));
+      var nm = el('div', 'lb-name', r.p.name);
+      nm.appendChild(el('small', null, '#' + r.p.num + (r.p.mp != null ? ' · ' + r.p.mp + ' matches' : '')));
+      row.appendChild(nm);
+      var bar = el('div', 'bar'); var fill = el('i'); fill.style.width = Math.max(4, Math.round(r.p[cat.k] / max * 100)) + '%'; bar.appendChild(fill);
+      row.appendChild(bar);
+      row.appendChild(el('span', 'lb-val', String(r.p[cat.k])));
+      table.appendChild(row);
+    });
+
+    var more = $('lb-more');
+    more.hidden = !!state.q || rows.length <= 10;
+    more.textContent = state.all ? 'Show top 10' : 'Show all ' + rows.length + ' players';
+
+    $('st-players').textContent = state.data.length;
+    $('st-goals').textContent = state.data.reduce(function(s, p){ return s + p.g; }, 0).toLocaleString('en-IN');
+  }
+
+  function setSource(live, when){
+    var src = $('lb-src'), dot = src.querySelector('.dot');
+    dot.classList.toggle('off', !live);
+    $('lb-src-text').textContent = live ? 'Live · updated ' + when : 'Snapshot from 12 Oct 2026';
+  }
+
+  render();
+  setSource(false);
+
+  function loadLive(){
+    var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = setTimeout(function(){ if (ctrl) ctrl.abort(); }, 7000);
+    var url = SB_URL + '/rest/v1/leaderboard_view?select=display_name,player_number,matches_played,total_goals,total_assists,total_ga,total_motm,total_saves,total_tackles';
+    fetch(url, { headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY }, signal: ctrl ? ctrl.signal : undefined })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(rows){
+        clearTimeout(timer);
+        if (!Array.isArray(rows) || !rows.length) throw new Error('empty');
+        state.data = rows.map(function(p){
+          return { name: String(p.display_name || 'Player'), num: p.player_number, mp: p.matches_played,
+            g: p.total_goals || 0, a: p.total_assists || 0, ga: p.total_ga || 0, sv: p.total_saves || 0, tk: p.total_tackles || 0, motm: p.total_motm || 0 };
+        });
+        render();
+        setSource(true, new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+      })
+      .catch(function(){ clearTimeout(timer); setSource(false); });
+  }
+  loadLive();
+  setInterval(loadLive, 120000);
+
+  $('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
